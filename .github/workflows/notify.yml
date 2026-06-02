@@ -1,0 +1,38 @@
+name: notify-module-release
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    name: notify-slack-and-teams
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build notification payload
+        id: payload
+        run: |
+          cat <<EOF > payload.json
+          {
+            "module": "${{ github.repository }}",
+            "version": "${{ github.event.release.tag_name }}",
+            "release_name": "${{ github.event.release.name }}",
+            "release_url": "${{ github.event.release.html_url }}"
+          }
+          EOF
+          cat payload.json
+
+      - name: Notify Slack
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        run: |
+          jq -n             --arg text "Terraform module published: ${{ github.repository }} ${{ github.event.release.tag_name }} - ${{ github.event.release.html_url }}"             '{text: $text}'           | curl -X POST -H 'Content-type: application/json'               --data @-               "${{ secrets.SLACK_WEBHOOK_URL }}"
+
+      - name: Notify Microsoft Teams
+        if: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
+        run: |
+          jq -n             --arg title "Terraform module published"             --arg text "Module: ${{ github.repository }} Version: ${{ github.event.release.tag_name }} URL: ${{ github.event.release.html_url }}"             '{title: $title, text: $text}'           | curl -X POST -H 'Content-type: application/json'               --data @-               "${{ secrets.TEAMS_WEBHOOK_URL }}"

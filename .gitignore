@@ -1,0 +1,13 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+terraform.tfvars
+.terraform.lock.hcl
+crash.log
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
