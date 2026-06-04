@@ -28,11 +28,13 @@ jobs:
           cat payload.json
 
       - name: Notify Slack
+        #checkov:skip=CKV_GHA_3:Webhook notification requires posting to Slack/Teams using repository secrets
         if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
         run: |
           jq -n             --arg text "Terraform module published: ${{ github.repository }} ${{ github.event.release.tag_name }} - ${{ github.event.release.html_url }}"             '{text: $text}'           | curl -X POST -H 'Content-type: application/json'               --data @-               "${{ secrets.SLACK_WEBHOOK_URL }}"
 
       - name: Notify Microsoft Teams
+        #checkov:skip=CKV_GHA_3:Webhook notification requires posting to Slack/Teams using repository secrets
         if: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
         run: |
           jq -n             --arg title "Terraform module published"             --arg text "Module: ${{ github.repository }} Version: ${{ github.event.release.tag_name }} URL: ${{ github.event.release.html_url }}"             '{title: $title, text: $text}'           | curl -X POST -H 'Content-type: application/json'               --data @-               "${{ secrets.TEAMS_WEBHOOK_URL }}"

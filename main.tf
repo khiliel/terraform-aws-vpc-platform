@@ -82,13 +82,17 @@ resource "aws_security_group" "this" {
     }
   }
 
-  egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = var.security_group_egress_cidr_blocks
+  dynamic "egress" {
+    for_each = length(var.security_group_egress_cidr_blocks) > 0 ? [1] : []
+    content {
+      description = "Allow all outbound traffic"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = var.security_group_egress_cidr_blocks
+    }
   }
+
 
   tags = merge(local.common_tags, {
     Name = "${var.name}-sg"

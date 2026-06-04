@@ -76,7 +76,7 @@ variable "security_group_ingress_rules" {
 variable "security_group_egress_cidr_blocks" {
   description = "CIDR blocks allowed for outbound security group traffic."
   type        = list(string)
-  default     = ["0.0.0.0/0"]
+  default     = []
 }
 
 variable "tags" {
