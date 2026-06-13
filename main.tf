@@ -64,6 +64,7 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public[0].id
 }
 
+#checkov:skip=CKV2_AWS_5:Security group is intentionally output for downstream module consumers
 resource "aws_security_group" "this" {
   count       = var.create_security_group ? 1 : 0
   name        = "${var.name}-sg"
@@ -95,6 +96,6 @@ resource "aws_security_group" "this" {
 
 
   tags = merge(local.common_tags, {
-    Name = "${var.name}-sg"
+    Name = "${var.name}-default-sg-restricted"
   })
 }
