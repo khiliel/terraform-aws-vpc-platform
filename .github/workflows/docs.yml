@@ -14,8 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Verify Terraform documentation
+        uses: terraform-docs/gh-actions@v1.3.0
+        with:
+          working-dir: .
+          config-file: .terraform-docs.yml
+          output-file: ""
+          output-method: ""
+          template: ""
+          git-push: "false"
+          fail-on-diff: "true"
 
       - name: Render terraform docs
         uses: terraform-docs/gh-actions@v1.3.0
