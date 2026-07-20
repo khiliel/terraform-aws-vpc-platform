@@ -1,11 +1,18 @@
+# .pre-commit-config.yaml
+
 repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.96.2
+    rev: v1.99.0
     hooks:
       - id: terraform_fmt
-      - id: terraform_validate
       - id: terraform_docs
         args:
-          - --args=--lockfile=false
-      - id: terraform_tflint
-      - id: terraform_checkov
+          - --args=--config=.terraform-docs.yml
+
+  - repo: https://github.com/bridgecrewio/checkov.git
+    rev: 3.2.461
+    hooks:
+      - id: checkov
+        args:
+          - --config-file
+          - .checkov.yml

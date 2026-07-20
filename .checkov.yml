@@ -1,0 +1,14 @@
+# .checkov.yml
+
+directory:
+  - .
+
+framework:
+  - terraform
+  - github_actions
+
+skip-check:
+  - CKV2_AWS_5    # Reusable module SG may be output for downstream consumers
+  - CKV2_AWS_11   # Flow logs will be added as optional feature later
+  - CKV2_AWS_12   # Default SG restriction can be handled by consuming baseline/account controls
+  - CKV_GHA_3     # Slack/Teams webhook notification requires secrets

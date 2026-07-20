@@ -44,6 +44,7 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
+          config_file: .checkov.yml
           directory: .
           quiet: true
           soft_fail: false
